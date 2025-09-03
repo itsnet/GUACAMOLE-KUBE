@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: itsnet/postgres-custom:latest
+          env:
+            - name: POSTGRES_DB
+              value: guacamole_db
+            - name: POSTGRES_USER
+              value: guacamole_user
+            - name: POSTGRES_PASSWORD
+              value: yourSecurePassword
+            - name: PGDATA
+              value: /pgdata/pgdata  # ✅ Avoids loop by using subdirectory
+          volumeMounts:
+            - name: db-data
+              mountPath: /pgdata      # ✅ Mount PVC here instead of default path
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+        - name: initdb
+          configMap:
+            name: initdb-sql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432

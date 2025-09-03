@@ -1,0 +1,62 @@
+kubectl delete configmap initdb-sql --kubeconfig itsnetspace-kubeconfig.yaml
+kubectl create configmap initdb-sql --from-file=initdb.sql --kubeconfig itsnetspace-kubeconfig.yaml
+
+
+
+
+
+
+
+
+
+kubectl exec -it postgres-8f8bbcfd-t5cgx --kubeconfig itsnetspace-kubeconfig.yaml -- bash
+apt update && apt install -y postgresql-client
+psql -h postgres -U guacamole_user -d guacamole_db
+
+
+
+
+
+
+
+ssh secure_link@185.234.69.232 -p 58888 -R 7777:localhost:32573
+
+kubectl --kubeconfig itsnetspace-kubeconfig.yaml exec -it postgres-8f8bbcfd-t5cgx -- bash
+
+
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+guacamole    NodePort    10.21.144.10    <none>        8080:31342/TCP   29s
+guacd        ClusterIP   10.21.254.206   <none>        4822/TCP         7h53m
+kubernetes   ClusterIP   10.21.0.1       <none>        443/TCP          10d
+postgres     ClusterIP   10.21.227.31    <none>        5432/TCP         5h15m
+
+
+NAME                         READY   STATUS    RESTARTS   AGE
+guacamole-56dbbb6445-c8rvr   1/1     Running   0          23s
+guacd-845fc6f494-627n2       1/1     Running   0          7h53m
+postgres-8f8bbcfd-t5cgx      1/1     Running   0          5h15m
+
+
+kubectl exec -it <guacamole-pod-name> --kubeconfig itsnetspace-kubeconfig.yaml -- bash
+apt update && apt install -y postgresql-client
+psql -h postgres -U guacamole_user -d guacamole_db
+
+
+autossh -M 0 -gNC -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval=10" -o "ServerAliveCountMax=3" -R 4000:10.21.144.10:8080 secure_link@185.234.69.232 -p 58888
+
+kubectl --kubeconfig itsnetspace-kubeconfig.yaml exec -it postgres-5b878575c7-cn9lg -- bash autossh -M 0 -gNC -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval=10" -o "ServerAliveCountMax=3" -R 4000:10.21.144.10:8080 secure_link@185.234.69.232 -p 58888
+
+powershell Add-MpPreference -ExclusionPath "C:\Users\STATION-07\securelink"
+
+
+kubectl apply -f https://raw.githubusercontent.com/<user>/<repo>/<branch>/<path-to-yaml>
+with private repos
+curl -H "Authorization: token <your-token>" \
+     -H "Accept: application/vnd.github.v3.raw" \
+     -L https://api.github.com/repos/<owner>/<repo>/contents/<path>?ref=<branch> \
+     | kubectl apply -f -
+
+
+kubectl create secret generic ssh-key-secret --type=kubernetes.io/ssh-auth --from-file=ssh-privatekey=id.rsa
+
+
