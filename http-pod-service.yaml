@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: http-website
+spec:
+  containers:
+  - name: web
+    image: your-http-image
+    ports:
+    - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-website-service
+spec:
+  selector:
+    app: http-website
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
