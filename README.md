@@ -11,5 +11,5 @@ Create a ClusterIssuer for Let's Encrypt:
 kubectl apply -f https://raw.githubusercontent.com/itsnet/GUACAMOLE-KUBE/refs/heads/main/cluster-issuer.yaml
 
 # 4. Deploy Your HTTP Website Pod and Service
-kubectl apply -f http-pod-service.yaml
+kubectl apply -f https://raw.githubusercontent.com/itsnet/GUACAMOLE-KUBE/refs/heads/main/http-pod-service.yaml
 
