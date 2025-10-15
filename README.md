@@ -15,6 +15,6 @@ kubectl apply -f https://raw.githubusercontent.com/itsnet/GUACAMOLE-KUBE/refs/he
 
 # 5. Kubernetes Resource Manifests Backup
 kubectl get all --all-namespaces -o yaml > cluster-manifests.yaml
-kubectl get configmaps,secrets,roles,rolebindings,clusterroles,clusterrolebindings --all-namespaces -o yaml > cluster-manifests-1.yaml
+kubectl get configmaps,secrets,roles,rolebindings,clusterroles,clusterrolebindings --all-namespaces -o yaml >> cluster-manifests.yaml
 
 
