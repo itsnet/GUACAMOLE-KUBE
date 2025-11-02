@@ -1,0 +1,2 @@
+rclone sync "C:\Program Files\Open Source\MeshCentral\meshcentral-data" "idrivee2:mesh-contabo/meshcentral-data" -v
+rclone sync "C:\Program Files\Open Source\MeshCentral\meshcentral-backups" "idrivee2:mesh-contabo/meshcentral-backups" -v
