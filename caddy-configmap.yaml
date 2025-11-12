@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy-config
+  namespace: guacamole
+data:
+  Caddyfile: |
+    gc.itscloud.uk {
+        reverse_proxy guacamole:80
+        tls office.its@gmail.com
+    }

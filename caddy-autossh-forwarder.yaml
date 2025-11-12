@@ -1,0 +1,21 @@
+# Add [GatewayPorts yes] at sshd_config
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ssh-forwarder
+  namespace: guacamole
+spec:
+  containers:
+  - name: alpine-ssh
+    image: itsnet/alpine-autossh
+    command: ["/bin/sh", "-c"]
+    args:
+      - autossh -M 0 -N -i /id_rsa/ssh-privatekey -N -R 0.0.0.0:80:caddy:80 -R 0.0.0.0:443:caddy:443 secure_link@185.222.240.24 -p 59999 -o UserKnownHostsFile=/id_rsa/known_hosts
+    volumeMounts:
+    - name: ssh-keys
+      mountPath: /id_rsa
+      readOnly: true
+  volumes:
+  - name: ssh-keys
+    secret:
+      secretName: ssh-tunnel-secret
