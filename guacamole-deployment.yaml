@@ -29,6 +29,8 @@ spec:
               value: yourSecurePassword
             - name: TOTP_ENABLED
               value: 'true'
+            - name: WEBAPP_CONTEXT
+              value: "/"
 ---
 apiVersion: v1
 kind: Service
