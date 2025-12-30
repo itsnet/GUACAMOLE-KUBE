@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# --- CONFIGURATION ---
+BUCKET="rackspot-migration"
+# iDrive e2 endpoints are unique. Format: https://<id>.<region>.idrivee2-<X>.com
+ENDPOINT="https://s3.ap-southeast-1.idrivee2.com"
+REGION="ap-southeast-1" # Use the region your bucket is located in
+SECRET_FILE="credentials-velero"
+
+# --- 1. CREATE CREDENTIALS FILE ---
+# This file is used by Velero to authenticate with iDrive e2
+cat <<EOF > $SECRET_FILE
+[default]
+aws_access_key_id = 4DRpKep3PQ2ejzUUixyl
+aws_secret_access_key = ypESizUWqT7EkRGsq7WjF61ZjV5seLbVPJTnYTkO
+EOF
+
+# --- 2. INSTALL VELERO ---
+# We use the AWS plugin for S3 compatibility and enable node-agent for PV backups
+velero install \
+    --provider aws \
+    --plugins velero/velero-plugin-for-aws:v1.10.1 \
+    --bucket $BUCKET \
+    --secret-file ./$SECRET_FILE \
+    --use-node-agent \
+    --use-volume-snapshots=false \
+    --backup-location-config region=$REGION,s3ForcePathStyle="true",s3Url=$ENDPOINT \
+        --velero-pod-cpu-request 100m \
+    --velero-pod-mem-request 128Mi \
+    --node-agent-pod-cpu-request 100m \
+    --node-agent-pod-mem-request 128Mi
+    --wait
+
+echo "Velero installation complete. Checking status..."
+kubectl get pods -n velero
+
+# --- 3. (OPTIONAL) CREATE A TEST BACKUP ---
+# Uncomment the line below to run a test backup of the entire cluster
+# velero backup create manual-cluster-backup --default-volumes-to-fs-backup

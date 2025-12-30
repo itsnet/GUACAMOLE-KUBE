@@ -1,0 +1,21 @@
+
+
+
+
+velero backup create db-pv-backup --include-namespaces=guacamole --include-resources=pvc,pv,pod,deployment --wait
+
+velero restore create --from-backup db-pv-backup --restore-volumes=true --namespace-mappings guacamole:guacamole --wait
+
+
+2ThLM3RgmxWTRwf801dc6d6060a49853ad63bb6b130c5930c
+
+Clean Restore Solution
+Drop the entire public schema (which holds all Guacamole tables) and recreate it before restoring:
+kubectl -n guacamole exec <target-postgres-pod> -- psql -U guacamole_user -d guacamole_db -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+
+kubectl -n guacamole exec postgres-7ff48c8495-bgwrn -- pg_dump -U guacamole_user --clean --if-exists -d guacamole_db > guac_dump_clean.sql
+
+
+One-Line Alternative
+Pipe drop + restore in single command (safer for automation):
+kubectl -n guacamole exec -i <target-postgres-pod> -- bash -c "PGPASSWORD=<password> psql -U guacamole_user -d guacamole_db -c 'DROP SCHEMA public CASCADE; CREATE SCHEMA public;' -f /tmp/guac_dump.sql"
