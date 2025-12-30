@@ -11,8 +11,8 @@ SECRET_FILE="credentials-velero"
 # This file is used by Velero to authenticate with iDrive e2
 cat <<EOF > $SECRET_FILE
 [default]
-aws_access_key_id = 4DRpKep3PQ2ejzUUixyl
-aws_secret_access_key = ypESizUWqT7EkRGsq7WjF61ZjV5seLbVPJTnYTkO
+aws_access_key_id = xxxxxxxxxxxxxxxx
+aws_secret_access_key = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 EOF
 
 # --- 2. INSTALL VELERO ---
@@ -37,3 +37,4 @@ kubectl get pods -n velero
 # --- 3. (OPTIONAL) CREATE A TEST BACKUP ---
 # Uncomment the line below to run a test backup of the entire cluster
 # velero backup create manual-cluster-backup --default-volumes-to-fs-backup
+
